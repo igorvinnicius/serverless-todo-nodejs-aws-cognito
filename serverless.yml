@@ -6,6 +6,7 @@ provider:
   name: aws
   region: eu-west-3
   runtime: nodejs12.x
+  stage: ${opt:stage, 'dev'}
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -18,6 +19,10 @@ provider:
       Resource: 
         - "arn:aws:dynamodb:eu-west-3:*:table/todos"
         - "arn:aws:dynamodb:eu-west-3:*:table/todos/index/*"
+  COGNITO_USER_POOL_ID:
+      Ref: UserPool
+  COGNITO_CLIENT_ID: 
+    Ref: UserPoolClient
 
 plugins:
   - serverless-webpack
@@ -30,6 +35,25 @@ package:
   individually: true 
 
 functions:
+  
+  signup:
+    handler: src/adapters/lambdas/auth/signup.handler
+    package:
+      individually: true
+    events:
+      - http:
+          path: signup
+          method: post
+  
+  signin:
+    handler: src/adapters/lambdas/auth/signin.handler
+    package:
+      individually: true
+    events:
+      - http:
+          path: signin
+          method: post
+  
   createTodo:
     handler: src/adapters/lambdas/todos/createTodo/createTodo.handler
     events:
@@ -93,21 +117,49 @@ functions:
 resources:
   Resources:
 
-    CognitoUserPool:
-      Type: "AWS::Cognito::UserPool"
+    UserPool:
+      Type: 'AWS::Cognito::UserPool'
       Properties:
-        MfaConfiguration: OFF
-        UserPoolName: my-user-pool
+        UserPoolName: '${self:service}-${self:provider.stage}-user-pool'
         UsernameAttributes:
-          - email
-        Policies:
-          PasswordPolicy:
-            MinimumLength: 6
-            RequireLowercase: False
-            RequireNumbers: True
-            RequireSymbols: False
-            RequireUppercase: True
-
+          - 'email'
+        AutoVerifiedAttributes:
+          - 'email'
+        VerificationMessageTemplate:
+          DefaultEmailOption: CONFIRM_WITH_LINK
+    
+    UserPoolClient:
+      Type: 'AWS::Cognito::UserPoolClient'
+      Properties:
+        ClientName: '${self:service}-${self:provider.stage}-user-pool-client'
+        UserPoolId: 
+          Ref: UserPool
+        ExplicitAuthFlows: 
+            - 'ALLOW_USER_PASSWORD_AUTH'
+            - 'ALLOW_REFRESH_TOKEN_AUTH'
+        PreventUserExistenceErrors: 'ENABLED'
+        SupportedIdentityProviders:
+          - 'COGNITO'
+    
+    UserPoolDomain:
+      Type: 'AWS::Cognito::UserPoolDomain'
+      Properties:
+        UserPoolId:
+          Ref: UserPool
+        Domain: '${self:service}-${self:provider.stage}'
+    
+    ApiGatewayAuthorizer:
+        DependsOn:
+          - ApiGatewayRestApi
+        Type: AWS::ApiGateway::Authorizer
+        Properties:
+          Name: EndpointAuthorizer
+          IdentitySource: method.request.header.Authorization
+          RestApiId:
+            Ref: ApiGatewayRestApi
+          Type: COGNITO_USER_POOLS
+          ProviderARNs:
+            - Fn::GetAtt: [UserPool, Arn]
 
     TodosDynamoDbTable:
       Type: 'AWS::DynamoDB::Table'
