@@ -6,6 +6,7 @@ const cognitoIdentityServiceProvider = new AWS.CognitoIdentityServiceProvider()
 module.exports.handler = async event => {
   
   console.log(event.body);
+  console.log(process.env);
 
   const body = JSON.parse(event.body);  
   const { username, password } = body;

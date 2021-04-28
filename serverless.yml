@@ -1,4 +1,4 @@
-service: serverless-clean-architecture-nodejs
+service: serverless-todo-list-nodejs
 
 frameworkVersion: '2'
 
@@ -19,10 +19,11 @@ provider:
       Resource: 
         - "arn:aws:dynamodb:eu-west-3:*:table/todos"
         - "arn:aws:dynamodb:eu-west-3:*:table/todos/index/*"
-  COGNITO_USER_POOL_ID:
+  environment:
+    COGNITO_USER_POOL_ID:
       Ref: UserPool
-  COGNITO_CLIENT_ID: 
-    Ref: UserPoolClient
+    COGNITO_CLIENT_ID: 
+      Ref: UserPoolClient
 
 plugins:
   - serverless-webpack
@@ -44,6 +45,8 @@ functions:
       - http:
           path: signup
           method: post
+    layers:
+      - { Ref: NodeModulesLambdaLayer }
   
   signin:
     handler: src/adapters/lambdas/auth/signin.handler
@@ -53,6 +56,8 @@ functions:
       - http:
           path: signin
           method: post
+    layers:
+      - { Ref: NodeModulesLambdaLayer }
   
   createTodo:
     handler: src/adapters/lambdas/todos/createTodo/createTodo.handler
@@ -171,13 +176,7 @@ resources:
             AttributeType: S
           -
             AttributeName: name
-            AttributeType: S
-          -
-            AttributeName: created_at
-            AttributeType: S
-          -
-            AttributeName: updated_at
-            AttributeType: S
+            AttributeType: S          
         KeySchema:
           -
             AttributeName: id
@@ -185,7 +184,7 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-        TableName: todos
+        TableName: todos-list
         GlobalSecondaryIndexes:
           - 
             IndexName: "todos_name_gsi"
@@ -196,7 +195,9 @@ resources:
             Projection: 
               NonKeyAttributes: 
                 - "id"
-                - "name"   
+                - "name"
+                - "created_at"
+                - "updated_at"
               ProjectionType: "INCLUDE"
             ProvisionedThroughput: 
               ReadCapacityUnits: "1"
