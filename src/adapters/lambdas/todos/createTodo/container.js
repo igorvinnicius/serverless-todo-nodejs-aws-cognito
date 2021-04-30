@@ -11,7 +11,7 @@ class Container extends BaseContainer {
 
         this.container.register({
             todosRepository: awilix.asClass(TodosRepository),
-            addTodoUseCase: awilix.asClass(AddTodosUseCase)
+            addTodoUseCase: awilix.asClass(AddTodosUseCase)            
         });
     }
 }

@@ -1,8 +1,8 @@
 module.exports = class CognitoProvider {
 
-    constructor(AWS) {
+    constructor(AWS, cognitoClientId) {
         this.cognitoIdentityServiceProvider = new AWS.CognitoIdentityServiceProvider();
-        this.tableName = 'users';
+        this.ClientId = cognitoClientId;
     }    
 
     async sigUp(email, password) {
@@ -10,7 +10,7 @@ module.exports = class CognitoProvider {
         const params = {
             Username: email,
             Password: password,
-            ClientId: process.env.COGNITO_CLIENT_ID
+            ClientId: this.cognitoClientId
         };
 
         return await cognitoIdentityServiceProvider.signUp(params)

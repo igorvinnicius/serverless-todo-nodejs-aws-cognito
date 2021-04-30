@@ -11,7 +11,8 @@ class Container extends BaseContainer {
 
         this.container.register({
             usersRepository: awilix.asClass(UsersRepository),
-            signUpUseCase: awilix.asClass(SignUpUseCase)
+            signUpUseCase: awilix.asClass(SignUpUseCase),
+            cognitoClientId: process.env.COGNITO_CLIENT_ID
         });
     }
 }
