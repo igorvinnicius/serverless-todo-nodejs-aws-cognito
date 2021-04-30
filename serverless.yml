@@ -203,3 +203,40 @@ resources:
               ReadCapacityUnits: "1"
               WriteCapacityUnits: "1"
 
+    UsersDynamoDbTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: id
+            AttributeType: S
+          -
+            AttributeName: email
+            AttributeType: S          
+        KeySchema:
+          -
+            AttributeName: id
+            KeyType: HASH            
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: users
+        GlobalSecondaryIndexes:
+          - 
+            IndexName: "users_email_gsi"
+            KeySchema: 
+              - 
+                AttributeName: "email"
+                KeyType: "HASH"           
+            Projection: 
+              NonKeyAttributes: 
+                - "id"
+                - "name"
+                - "created_at"
+                - "updated_at"
+              ProjectionType: "INCLUDE"
+            ProvisionedThroughput: 
+              ReadCapacityUnits: "1"
+              WriteCapacityUnits: "1"
+
