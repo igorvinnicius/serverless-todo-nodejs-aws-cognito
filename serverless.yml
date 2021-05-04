@@ -17,8 +17,10 @@ provider:
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
       Resource: 
-        - "arn:aws:dynamodb:eu-west-3:*:table/todos"
-        - "arn:aws:dynamodb:eu-west-3:*:table/todos/index/*"
+        - "arn:aws:dynamodb:eu-west-3:*:table/todos-list"
+        - "arn:aws:dynamodb:eu-west-3:*:table/todos-list/index/*"
+        - "arn:aws:dynamodb:eu-west-3:*:table/users"
+        - "arn:aws:dynamodb:eu-west-3:*:table/users/index/*"
   environment:
     COGNITO_USER_POOL_ID:
       Ref: UserPool
@@ -38,7 +40,7 @@ package:
 functions:
   
   signup:
-    handler: src/adapters/lambdas/auth/signup.handler
+    handler: src/adapters/lambdas/auth/signup/signUp.handler
     package:
       individually: true
     events:

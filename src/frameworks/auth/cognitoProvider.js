@@ -5,15 +5,15 @@ module.exports = class CognitoProvider {
         this.ClientId = cognitoClientId;
     }    
 
-    async sigUp(email, password) {
+    async signUp(email, password) {
 
         const params = {
             Username: email,
             Password: password,
-            ClientId: this.cognitoClientId
+            ClientId: this.ClientId
         };
 
-        return await cognitoIdentityServiceProvider.signUp(params)
+        return await this.cognitoIdentityServiceProvider.signUp(params)
         .promise()
         .then((result) => {
             console.log("SUCCESS SIGN UP!")
@@ -25,5 +25,4 @@ module.exports = class CognitoProvider {
             return err
         });
     }
-
 }

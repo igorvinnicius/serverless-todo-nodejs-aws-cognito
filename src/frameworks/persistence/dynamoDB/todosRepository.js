@@ -5,7 +5,7 @@ module.exports = class TodosRepository extends DynamoDBRepository {
 
     constructor(AWS, uuid) {
         super(AWS, uuid);
-        this.tableName = 'todos';
+        this.tableName = 'todos-list';
     }    
 
     async getByName(name) {

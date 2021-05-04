@@ -1,44 +1,28 @@
 'use strict';
 
-const AWS = require('aws-sdk')
-const cognitoIdentityServiceProvider = new AWS.CognitoIdentityServiceProvider()
+const SignUpInput = require ('../../../../application/use_cases/auth/signUp/signUpInput');
+const inputSchema = require('./inputSchema');
+const container = require('./container');
 
-module.exports.handler = async event => {
-  
-  console.log(event.body);
-  console.log(process.env);
+console.log(container);
 
-  const body = JSON.parse(event.body);  
-  const { username, password } = body;
+const signUpUseCase = container.get('signUpUseCase');
+const requestsService = container.get('requestService');
+const middyHandler = container.get('middyHandler');
+
+const baseHandler = async (event) => {
   
-  if (!username || !password) {
-    return response(400, 'You must specify the username and password');
-  }
-  
-  return cognitoIdentityServiceProvider.signUp({
-    Username: username,
-    Password: password,
-    ClientId: process.env.COGNITO_CLIENT_ID
-  }).promise()
-  .then((result) => {
-    return response(200, 'Signed up successfully, please check your email');
-  })
-  .catch((error) => {
-    return response(error.statusCode, error.message);
+  const { name, email, password } = event.body;   
+
+  const signUpInput = new SignUpInput(name, email, password);  
+
+  return await requestsService.handle(async () => {
+      
+      return await signUpUseCase.execute(signUpInput);
+      
   });
 
 };
 
-const response = (responseCode, message) => {
-  return {
-    statusCode: responseCode,
-    body: JSON.stringify(
-      {
-        message,
-      },
-      null,
-      2
-    ),
-  };
-
-}
+const handler = middyHandler(baseHandler, inputSchema);   
+module.exports = { handler }

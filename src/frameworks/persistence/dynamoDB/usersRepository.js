@@ -12,7 +12,7 @@ module.exports = class UsersRepository extends DynamoDBRepository {
 
         var params = {
             TableName: this.tableName,
-            IndexName: 'todos_name_gsi',
+            IndexName: 'users_email_gsi',
             KeyConditionExpression: '#email = :email',
             ExpressionAttributeNames: { "#email": "email" },
             ExpressionAttributeValues: { ':email': email }

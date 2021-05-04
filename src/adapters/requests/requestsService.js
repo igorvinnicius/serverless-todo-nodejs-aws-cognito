@@ -16,6 +16,7 @@ module.exports = class RequestsService {
 
         } catch (error) {            
             
+            console.log('REQUEST SERVICE ERROR');
             console.log(error);
 
             return {
@@ -26,7 +27,7 @@ module.exports = class RequestsService {
                     error: {
                         name: error.name,
                         message: error.message,
-                        details: error.data ? error.data : null            
+                        details: error ? error.data : null            
                     }
                 })
             };           

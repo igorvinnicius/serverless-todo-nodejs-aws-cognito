@@ -18,12 +18,13 @@ module.exports = class BaseContainer {
             requestService: awilix.asClass(RequestsService),            
             middyHandler: awilix.asValue(middyHandler),
             uuid: awilix.asValue(uuid),
-            AWS: awilix.asValue(AWS)
-            
+            AWS: awilix.asValue(AWS)            
           });
     }
 
     get(dependency) {
+        console.log('Will try get dependency');
+        console.log(dependency);
         return this.container.resolve(dependency);
     }    
 }  
