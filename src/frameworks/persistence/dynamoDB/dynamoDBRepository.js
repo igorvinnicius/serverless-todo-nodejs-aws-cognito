@@ -9,7 +9,10 @@ module.exports = class DynamoDBRepository {
 
     async add(item) {               
 
-        item.id = this.uuid.v1();
+        if(item.id == null) {            
+            item.id = this.uuid.v1();
+        }   
+
         const date = new Date().toISOString()
         item.created_at = date;
         item.updated_at = date;
@@ -135,7 +138,5 @@ module.exports = class DynamoDBRepository {
             expressionAttributeValues: expressionAttributeValues,
             updateExpression: updateExpression
         }
-
     }
-
 }

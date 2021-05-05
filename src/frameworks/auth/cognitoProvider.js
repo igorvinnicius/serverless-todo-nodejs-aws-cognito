@@ -1,3 +1,5 @@
+const CognitoError = require('./cognitoError');
+
 module.exports = class CognitoProvider {
 
     constructor(AWS, cognitoClientId) {
@@ -17,12 +19,11 @@ module.exports = class CognitoProvider {
         .promise()
         .then((result) => {
             console.log("SUCCESS SIGN UP!")
-            return result;
+            console.log(result);
+            return { success: true, data: result };
         })
         .catch((err) => {
-            console.log("FAILED SIGN UP!")
-            console.log(err);
-            return err
+            throw new CognitoError(err);
         });
     }
 }

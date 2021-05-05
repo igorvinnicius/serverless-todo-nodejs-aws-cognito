@@ -23,7 +23,8 @@ module.exports = class SignUpUseCase {
             throw new SignUpError('Sign up has been failed.');
         }
 
-        const newUser = new User(signUpInput.name, signUpInput.email);
+        const newUser = new User(signUpInput.name, signUpInput.email);        
+        newUser.id = signUpResponse.data.UserSub;
         return await this.usersRepository.add(newUser);
     }
 }
