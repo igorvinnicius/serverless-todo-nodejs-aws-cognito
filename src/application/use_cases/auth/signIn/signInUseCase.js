@@ -3,18 +3,11 @@ const SignInError = require('../../../errors/signInError');
 
 module.exports = class SignInUseCase {
 
-    constructor(authService, usersRepository) {
-        this.authService = authService;
-        //this.usersRepository = usersRepository;
+    constructor(authService) {
+        this.authService = authService;        
     }
 
-    async execute(signInInput) {
-
-        // const user = await this.usersRepository.getByEmail(signUpInput.email);        
-
-        // if (user) {
-        //     throw new DuplicateError('User already exists.');
-        // }        
+    async execute(signInInput) {        
 
         const signInResponse = await this.authService.signIn(signInInput.email, signInInput.password);        
 

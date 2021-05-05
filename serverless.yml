@@ -51,7 +51,7 @@ functions:
       - { Ref: NodeModulesLambdaLayer }
   
   signin:
-    handler: src/adapters/lambdas/auth/signin.handler
+    handler: src/adapters/lambdas/auth/signin/signIn.handler
     package:
       individually: true
     events:

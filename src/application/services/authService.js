@@ -9,4 +9,9 @@ module.exports = class AuthService {
         return this.authProvider.signUp(email, password);
     }
 
+    async signIn(email, password) {
+
+        return this.authProvider.signIn(email, password);
+    }
+
 }
