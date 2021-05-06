@@ -1,7 +1,8 @@
 module.exports = class Todo {
     
-    constructor(name) {
+    constructor(name, userId) {
         this.id = null;
-        this.name = name;            
+        this.name = name;
+        this.userId = userId;         
     }
 }

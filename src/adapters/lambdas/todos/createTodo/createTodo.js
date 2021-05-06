@@ -10,9 +10,12 @@ const middyHandler = container.get('middyHandler');
 
 const baseHandler = async (event) => {
   
-    const { name } = event.body;   
+    const userData = event.requestContext.authorizer.claims;
+    const { name } = event.body;
 
-    const addTodoInput = new AddTodoInput(name);  
+    console.log(userData);
+
+    const addTodoInput = new AddTodoInput(name, userData.sub);  
 
     return await requestsService.handle(async () => {
         

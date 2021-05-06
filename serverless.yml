@@ -66,8 +66,11 @@ functions:
     events:
       - http:
           path: todos
-          method: post
-          cors: true
+          method: post          
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
     layers:
       - { Ref: NodeModulesLambdaLayer }
     package:
@@ -79,7 +82,10 @@ functions:
       - http:
           path: todos
           method: get
-          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
     layers:
       - { Ref: NodeModulesLambdaLayer }
     package:
@@ -91,7 +97,10 @@ functions:
       - http:
           path: todos/{id}
           method: get
-          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
     layers:
       - { Ref: NodeModulesLambdaLayer }
     package:
@@ -103,7 +112,10 @@ functions:
       - http:
           path: todos
           method: put
-          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
     layers:
       - { Ref: NodeModulesLambdaLayer }
     package:
@@ -115,7 +127,10 @@ functions:
       - http:
           path: todos/{id}
           method: delete
-          cors: true
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId:
+              Ref: ApiGatewayAuthorizer
     layers:
       - { Ref: NodeModulesLambdaLayer }
     package:

@@ -15,8 +15,8 @@ module.exports = class AddTodoUseCase {
             throw new DuplicateError('Todo name already exists.');
         }
 
-        const newTodo = new Todo(addTodoInput.name);        
-        
-        return await this.todosRepository.add(newTodo);        
+        const newTodo = new Todo(addTodoInput.name, addTodoInput.userId);        
+        console.log(newTodo);
+        return await this.todosRepository.add(newTodo);     
     }
 }
