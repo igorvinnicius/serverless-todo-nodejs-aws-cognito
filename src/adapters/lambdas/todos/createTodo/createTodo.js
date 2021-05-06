@@ -24,5 +24,5 @@ const baseHandler = async (event) => {
     });
 };
 
-const handler = middyHandler(baseHandler, inputSchema);   
+const handler = middyHandler(baseHandler, inputSchema);
 module.exports = { handler }
