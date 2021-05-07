@@ -4,7 +4,7 @@ module.exports = class GetTodosUseCase {
         this.todosRepository = todosRepository;
     }
 
-    async execute() {        
-        return await this.todosRepository.getAll();
+    async execute(userId) {        
+        return await this.todosRepository.getByUser(userId);
     }
 }

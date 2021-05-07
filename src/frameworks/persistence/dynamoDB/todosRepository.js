@@ -25,6 +25,26 @@ module.exports = class TodosRepository extends DynamoDBRepository {
         })
         .catch((err) => {
             throw new DynamoDBError(err);
-        });      
+        });
+    }
+
+    async getByUser(userId) {
+
+        var params = {
+            TableName: this.tableName,
+            IndexName: 'todos_user_gsi',
+            KeyConditionExpression: '#userId = :userId',
+            ExpressionAttributeNames: { "#userId": "userId" },
+            ExpressionAttributeValues: { ':userId': userId }
+        };
+        
+        return  await this.dynamoDb.query(params)
+        .promise()
+        .then((data) => {            
+            return data.Count == 0 ? null : data.Items;                
+        })
+        .catch((err) => {
+            throw new DynamoDBError(err);
+        });
     }      
 }
