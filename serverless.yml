@@ -193,7 +193,10 @@ resources:
             AttributeType: S
           -
             AttributeName: name
-            AttributeType: S          
+            AttributeType: S
+          -
+            AttributeName: userId
+            AttributeType: S
         KeySchema:
           -
             AttributeName: id
@@ -213,6 +216,24 @@ resources:
               NonKeyAttributes: 
                 - "id"
                 - "name"
+                - "created_at"
+                - "updated_at"
+              ProjectionType: "INCLUDE"
+            ProvisionedThroughput: 
+              ReadCapacityUnits: "1"
+              WriteCapacityUnits: "1"
+
+          - 
+            IndexName: "todos_user_gsi"
+            KeySchema: 
+              - 
+                AttributeName: "userId"
+                KeyType: "HASH"           
+            Projection: 
+              NonKeyAttributes: 
+                - "id"
+                - "name"
+                - "userId"
                 - "created_at"
                 - "updated_at"
               ProjectionType: "INCLUDE"
