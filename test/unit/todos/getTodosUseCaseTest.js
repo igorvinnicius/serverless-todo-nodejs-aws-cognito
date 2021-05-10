@@ -8,17 +8,17 @@ describe('Get Todos Use Case', () => {
 
     it('should return a list of todos', async () => {
 
-        const todosRepository = { getAll:() => {} }
+        const todosRepository = { getByUser:() => {} }
 
         const expectedTodos = [new Todo('Task 1'), new Todo('Task 2')]
 
-        sinon.stub(todosRepository, 'getAll').returns(expectedTodos);
+        sinon.stub(todosRepository, 'getByUser').returns(expectedTodos);
 
         const getTodosUseCase = new GetTodosUseCase(todosRepository);
 
         const todos = await getTodosUseCase.execute();
 
-        expect.expect(todosRepository.getAll.called).to.be.true;
+        expect.expect(todosRepository.getByUser.called).to.be.true;
         expect.expect(todos).to.be.equals(todos);    
 
     });

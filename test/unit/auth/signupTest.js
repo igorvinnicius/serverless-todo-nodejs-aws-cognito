@@ -20,7 +20,7 @@ describe('SignUp Use Case', () => {
         sinon.stub(usersRepository, 'getByEmail').returns(null);        
         sinon.stub(usersRepository, 'add').returns(expectedUser);        
 
-        sinon.stub(authService, 'signUp').returns({ success: true });
+        sinon.stub(authService, 'signUp').returns( { success: true, data: { UserSub: "123" } });
 
         const signUpUseCase = new SignUpUseCase(authService, usersRepository);       
 
@@ -36,7 +36,7 @@ describe('SignUp Use Case', () => {
         try {                       
 
             const authService = { signUp:() => {}};            
-            const usersRepository = {getByEmail:() =>{}}
+            const usersRepository = { getByEmail:() =>{} }
 
             const signUpInput = new SignUpInput("Jon Snow", "jon@starks.com", "123456");
             sinon.stub(usersRepository, 'getByEmail').returns(new User("Jon Snow", "jon@starks.com"));                       

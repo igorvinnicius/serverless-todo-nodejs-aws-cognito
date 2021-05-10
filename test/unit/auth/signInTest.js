@@ -12,20 +12,18 @@ describe('SignIn Use Case', () => {
     it('should return the sign in data correctly', async () => {        
         
         const authService = { signIn:() => {}};
-        const usersRepository = {getByEmail:() =>{}}
+        const usersRepository = { getByEmail:() =>{} }
 
         const signInInput = new SignInInput("jon@starks.com", "123456");           
 
-        sinon.stub(authService, 'signIn').returns({ success: true });
-        sinon.stub(authService, 'signIn').returns({ success: true });
+        sinon.stub(authService, 'signIn').returns({ success: true });       
 
         const signInUseCase = new SignInUseCase(authService, usersRepository);       
 
         const signInResponse = await signInUseCase.execute(signInInput);
         
         expect.expect(authService.signIn.called).to.be.true;
-        expect.expect(signInResponse.data).to.not.be.null;
-        expect.expect(usersRepository.getByEmail.called).to.be.true;
+        expect.expect(signInResponse.data).to.not.be.null;        
     });    
 
     it('should throw an error when signIn fails', async () => {
@@ -33,7 +31,7 @@ describe('SignIn Use Case', () => {
         try {                       
 
             const authService = { signIn:() => {} };            
-            const usersRepository = {getByEmail:() =>{} };
+            const usersRepository = { getByEmail:() =>{} };
             
             const signInInput = new SignInInput("jon@starks.com", "123456");                        
 
